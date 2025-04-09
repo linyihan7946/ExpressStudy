@@ -5,9 +5,12 @@
  * @Version: 1.0
  */
 // Depends on tencentcloud-sdk-nodejs version 4.0.3 or higher
-import { json } from "body-parser";
 import * as tencentcloud from "tencentcloud-sdk-nodejs-lkeap";
-// const tencentcloud = require("tencentcloud-sdk-nodejs-lkeap");
+import dotenv from 'dotenv';
+dotenv.config();
+
+const secretId = process.env.TENCENT_CLOUD_SECRET_ID;
+const secretKey = process.env.TENCENT_CLOUD_SECRET_KEY;
 
 const LkeapClient = tencentcloud.lkeap.v20240522.Client;
 
@@ -18,8 +21,8 @@ const LkeapClient = tencentcloud.lkeap.v20240522.Client;
 // 密钥可前往官网控制台 https://console.cloud.tencent.com/cam/capi 进行获取
 const clientConfig = {
   credential: {
-    secretId: "",
-    secretKey: "",
+    secretId,
+    secretKey,
   },
   region: "ap-guangzhou",
   profile: {
