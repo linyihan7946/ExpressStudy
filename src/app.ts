@@ -7,6 +7,7 @@
 import express, { Request, Response } from 'express';
 import cors from 'cors';
 import { Chat } from './LLMApi';
+import { designApiDocument } from './DesignApiDocument';
 
 const app = express();
 const port: number = 3001;
@@ -24,13 +25,22 @@ app.get('/', (req: Request, res: Response) => {
 // 添加MCP服务端路由
 app.post('/mcp', (req: Request, res: Response) => {
   const { modelId, context } = req.body;
-  
+
+  // 检查必要的参数是否存在
+  // if (!modelId || !context) {
+  //   return res.status(400).json({ 
+  //     status: 'error', 
+  //     message: 'Missing required parameters: modelId and context' 
+  //   });
+  // }
+
   // 模拟处理MCP请求
   const response = {
     modelId,
     context,
     status: 'success',
-    message: 'MCP request processed successfully'
+    message: 'MCP request processed successfully',
+    timestamp: new Date().toISOString()
   };
 
   res.json(response);
@@ -56,6 +66,18 @@ app.post('/llm-api', async (req: Request, res: Response) => {
   const { Model, Messages, Stream } = req.body;
 
   try {
+    if (Messages && Messages.length > 0) {
+      const q = Messages[0].Content;
+      const context = `以下是设计工具的Api文档：
+                      ${designApiDocument}
+                      我的问题是：
+                      ${q}
+                      请根据问题输出符合MCP协议的回答，返回结果直接用于调用设计工具的Api。
+      `;
+      console.log(context);
+      Messages[0].Content = context;
+    }
+
     const params = {
       Model,
       Messages,

@@ -59,7 +59,8 @@ export function Chat(params: {Model: string, Messages: {Role: string, Content: s
               return;
             }
             if (data === "[DONE]") {
-              resolve(streamContent); // 返回所有收集到的内容
+              const result = streamContent.replace(/```json\n/g, "").replace(/\n```/g, "");
+              resolve(result); // 返回所有收集到的内容
               return;
             }
             const json = JSON.parse(data);
