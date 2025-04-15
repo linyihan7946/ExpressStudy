@@ -73,6 +73,7 @@ app.post('/llm-api', async (req: Request, res: Response) => {
                       我的问题是：
                       ${q}
                       请根据问题输出符合MCP协议的回答，返回结果直接用于调用设计工具的Api。
+                      要求返回去掉代码解释，方便我直接调用。
       `;
       console.log(context);
       Messages[0].Content = context;
